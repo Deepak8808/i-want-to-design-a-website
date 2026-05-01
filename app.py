@@ -263,7 +263,7 @@ class CoupleSyncHandler(BaseHTTPRequestHandler):
 
             while True:
                 try:
-                    packet = client_queue.get(timeout=20)
+                    packet = client_queue.get(timeout=10)
                     self.wfile.write(packet)
                 except queue.Empty:
                     self.wfile.write(b": keep-alive\n\n")
@@ -397,6 +397,7 @@ class CoupleSyncHandler(BaseHTTPRequestHandler):
 def main():
     UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
     server = ThreadingHTTPServer(("0.0.0.0", PORT), CoupleSyncHandler)
+    server.daemon_threads = True
     print(f"Couple Sync Listen is running at http://localhost:{PORT}")
     server.serve_forever()
 
