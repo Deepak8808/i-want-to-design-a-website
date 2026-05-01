@@ -1,0 +1,10 @@
+{
+  "name": "couple-sync-listen",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A free shared listening room prototype for synced couple music playback.",
+  "scripts": {
+    "start": "start-python-server.bat",
+    "dev": "start-python-server.bat"
+  }
+}

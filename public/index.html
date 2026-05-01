@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LoveSync</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="hero-panel" aria-label="Listening room">
+        <nav class="topbar">
+          <a class="brand" href="/" aria-label="LoveSync home">
+            <span class="brand-mark">LS</span>
+            <span>LoveSync</span>
+          </a>
+          <div class="room-pill">
+            <span id="presenceDot" class="dot"></span>
+            <span id="presenceText">Solo</span>
+          </div>
+        </nav>
+
+        <div class="stage">
+          <div class="record-wrap" aria-hidden="true">
+            <div class="heart-field">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+            <div id="record" class="record">
+              <div class="record-ring"></div>
+              <div class="record-label">
+                <span id="recordInitials">LS</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="player-panel">
+            <p class="eyebrow">Your private love room</p>
+            <h1 id="songTitle">Play your song together</h1>
+            <p id="syncStatus" class="sync-status">Create a room, upload one song as host, and share the link. Your partner will stream the same song from here.</p>
+
+            <audio id="audio" preload="metadata"></audio>
+            <div id="youtubeShell" class="youtube-shell is-hidden" aria-label="YouTube player">
+              <div id="youtubePlayer"></div>
+            </div>
+
+            <div class="progress-row">
+              <span id="currentTime">0:00</span>
+              <input id="seek" type="range" min="0" max="1000" value="0" aria-label="Seek song" />
+              <span id="duration">0:00</span>
+            </div>
+
+            <div class="controls" aria-label="Playback controls">
+              <button id="rewindBtn" class="icon-btn" type="button" aria-label="Back 10 seconds" title="Back 10 seconds">
+                <span>-10</span>
+              </button>
+              <button id="playBtn" class="play-btn" type="button" aria-label="Play">
+                <span id="playIcon">Play</span>
+              </button>
+              <button id="forwardBtn" class="icon-btn" type="button" aria-label="Forward 10 seconds" title="Forward 10 seconds">
+                <span>+10</span>
+              </button>
+            </div>
+
+            <div class="host-tools">
+              <button id="createRoomBtn" class="primary-btn" type="button">Create Love Room</button>
+              <button id="copyLinkBtn" class="secondary-btn" type="button">Copy Invite</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="workspace-grid" aria-label="Room setup and chat">
+        <div class="setup-panel panel">
+          <h2>Host Song</h2>
+          <label class="field">
+            <span>Your name</span>
+            <input id="nameInput" type="text" maxlength="30" placeholder="Avery" />
+          </label>
+
+          <label class="file-drop" for="fileInput">
+            <input id="fileInput" type="file" accept="audio/*" />
+            <span class="file-title">Upload once for both</span>
+            <span id="fileName" class="file-name">MP3, WAV, OGG, M4A up to 100 MB</span>
+          </label>
+
+          <div class="divider"><span>or</span></div>
+
+          <label class="field">
+            <span>Direct audio URL</span>
+            <input id="urlInput" type="url" placeholder="https://example.com/song.mp3" />
+          </label>
+          <button id="loadUrlBtn" class="secondary-btn full" type="button">Use Shared URL</button>
+
+          <div class="youtube-box">
+            <h3>YouTube Song</h3>
+            <label class="field compact">
+              <span>YouTube link</span>
+              <input id="youtubeInput" type="url" placeholder="https://youtube.com/watch?v=..." />
+            </label>
+            <div class="source-actions">
+              <button id="loadYoutubeVideoBtn" class="secondary-btn" type="button">Video</button>
+              <button id="loadYoutubeLiteBtn" class="secondary-btn" type="button">Lite Video</button>
+            </div>
+            <p class="tiny-note">True YouTube audio-only is not available in a normal website. Lite mode keeps the player compact to save screen space.</p>
+          </div>
+
+          <div class="room-code">
+            <span>Room code</span>
+            <strong id="roomCode">None</strong>
+          </div>
+        </div>
+
+        <div class="queue-panel panel">
+          <h2>Together</h2>
+          <div class="metric">
+            <span>Mode</span>
+            <strong id="modeText">Host</strong>
+          </div>
+          <div class="metric">
+            <span>Drift</span>
+            <strong id="driftText">0.00s</strong>
+          </div>
+          <div class="metric">
+            <span>Loaded</span>
+            <strong id="sourceText">No song</strong>
+          </div>
+          <button id="syncNowBtn" class="primary-btn full" type="button">Match Their Moment</button>
+        </div>
+
+        <div class="love-notes-panel panel">
+          <div class="chat-head">
+            <div>
+              <h2>Love Notes</h2>
+              <p class="panel-subtitle">Keep the sweet thoughts separate from the chat.</p>
+            </div>
+            <span id="noteCount">0</span>
+          </div>
+
+          <div class="mood-row" aria-label="Love note mood">
+            <button class="mood-chip active" type="button" data-mood="Missing you">Missing you</button>
+            <button class="mood-chip" type="button" data-mood="Our song">Our song</button>
+            <button class="mood-chip" type="button" data-mood="Forever">Forever</button>
+          </div>
+
+          <div class="quick-notes" aria-label="Quick romantic notes">
+            <button type="button" data-note="This song feels like us.">This song feels like us.</button>
+            <button type="button" data-note="I wish you were right next to me.">I wish you were right next to me.</button>
+            <button type="button" data-note="Save this moment with me.">Save this moment with me.</button>
+          </div>
+
+          <div id="loveNotes" class="love-notes" aria-live="polite"></div>
+
+          <form id="noteForm" class="note-form">
+            <textarea id="noteInput" maxlength="240" placeholder="Write something only they would understand" aria-label="Write a love note"></textarea>
+            <button class="primary-btn full" type="submit">Send Love Note</button>
+          </form>
+        </div>
+
+        <div class="chat-panel panel">
+          <div class="chat-head">
+            <div>
+              <h2>Chatting</h2>
+              <p class="panel-subtitle">Tiny messages while the music plays.</p>
+            </div>
+            <span id="messageCount">0</span>
+          </div>
+          <div id="messages" class="messages" aria-live="polite"></div>
+          <form id="messageForm" class="message-form">
+            <input id="messageInput" type="text" maxlength="240" placeholder="Type a chat message" aria-label="Send a chat message" />
+            <button class="icon-send" type="submit" aria-label="Send chat message">Go</button>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <script src="/app.js"></script>
+  </body>
+</html>
